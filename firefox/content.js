@@ -9,7 +9,7 @@ function getItems() {
   }
   items.forEach((item) => {
     const favouriteButton = document.createElement("button");
-    favouriteButton.innerText = "Favourite";
+    favouriteButton.innerText = "❤️";
     favouriteButton.className = "favourite-button";
     favouriteButton.style.marginLeft = "10px";
     favouriteButton.addEventListener("click", () => {
@@ -46,3 +46,4 @@ function loadFavourites() {
 
 loadFavourites();
 console.log("content.js");
+setTimeout(getItems, 1000);
