@@ -10,7 +10,8 @@ function getItems() {
   items.forEach((item) => {
     const favouriteButton = document.createElement("button");
     favouriteButton.innerText = "❤️";
-    favouriteButton.className = "favourite-button";
+    favouriteButton.className =
+      "favourite-button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150 active:scale-90 bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn";
     favouriteButton.style.marginLeft = "10px";
     favouriteButton.addEventListener("click", () => {
       const itemId = item.closest('div[id^="item_"]').id;
