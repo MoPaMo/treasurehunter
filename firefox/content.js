@@ -17,7 +17,6 @@ function getItems() {
       const itemId = item.closest('div[id^="item_"]').id;
       toggleFavourite(itemId);
     });
-    console.log(item);
     item.appendChild(favouriteButton);
   });
 }
