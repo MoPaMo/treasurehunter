@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", getItems);
 
 function getItems() {
+  console.log("getItems");
   const items = document.querySelectorAll(".grid .flex.items-center");
   if (items.length === 0) {
     setTimeout(getItems, 1000);
@@ -44,3 +45,4 @@ function loadFavourites() {
 }
 
 loadFavourites();
+console.log("content.js");
