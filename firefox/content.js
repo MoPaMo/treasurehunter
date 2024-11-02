@@ -19,6 +19,8 @@ function getItems() {
     });
     item.appendChild(favouriteButton);
   });
+
+  loadFavourites();
 }
 
 function toggleFavourite(itemId) {
@@ -38,12 +40,11 @@ function loadFavourites() {
     if (item) {
       const button = item.querySelector(".favourite-button");
       if (button) {
-        button.innerText = "Unfavourite";
+        button.innerText = "💔";
       }
     }
   });
 }
 
-loadFavourites();
 console.log("content.js");
 setTimeout(getItems, 1000);
