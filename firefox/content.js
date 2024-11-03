@@ -5,7 +5,7 @@ let Doubloons = 0;
 
 function getItems() {
   console.log("getItems");
-  const items = document.querySelectorAll(".grid div.flex.items-center");
+  const items = document.querySelectorAll('div[id^="item_"]');
   if (items.length === 0) {
     setTimeout(getItems, 1000);
     return;
@@ -15,38 +15,32 @@ function getItems() {
     favouriteButton.innerText = iconA;
     favouriteButton.className =
       "favourite-button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150 active:scale-90 bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn";
+    favouriteButton.id = item.id.replace("item_", "favourite_");
     favouriteButton.style.marginLeft = "10px";
-    favouriteButton.addEventListener("click", () => {
-      const titleElement = item.querySelector("h3");
-      const itemId = generateItemId(
-        titleElement ? titleElement.innerText.trim() : item.id
-      );
+    favouriteButton.addEventListener("click", (e) => {
+      const itemId = e.currentTarget.id.replace("favourite_", "");
       toggleFavourite(itemId);
     });
-    item.appendChild(favouriteButton);
+    // append to child flex items-center p-6 pt-4
+    item
+      .querySelector("div.flex.items-center.p-6.pt-4")
+      .appendChild(favouriteButton);
   });
   addStyles();
   addProgressBar();
-  addPOI("20%", "path/to/image1.png");
-  addPOI("50%", "path/to/image2.png");
-  addPOI("80%", "path/to/image3.png");
   setProgress(30);
   loadFavourites();
-  getDoubloons();
+  getDoublons();
 }
 
-// Generate a unique ID based on the item's title or a specific attribute
-function generateItemId(title) {
-  return `item_${title.replace(/\s+/g, "_").toLowerCase()}`;
-}
-
-// getDoubloons
-function getDoubloons() {
+//getDoublons
+/*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
+function getDoublons() {
   document
     .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
     .forEach((item) => {
       console.log(item.innerHTML);
-      // Strip the span containing "Doubloons"
+      // strip <span class="sm:inline hidden"> Doubloons</span>
       let val = item.innerHTML.replace(
         /<span class="sm:inline hidden"> Doubloons<\/span>/,
         ""
@@ -54,29 +48,18 @@ function getDoubloons() {
       val = Number(val.replace(/[^\d.-]/g, "")) || 0;
       console.log(val);
       Doubloons = val;
-      // Store doubloons count with a unique key
-      const parentItem = item.closest('div[id^="item_"]');
-      if (parentItem) {
-        const titleElement = parentItem.querySelector("h3");
-        const itemId = generateItemId(
-          titleElement ? titleElement.innerText.trim() : parentItem.id
-        );
-        localStorage.setItem(`${itemId}_doubloons`, Doubloons);
-      }
+      return val;
     });
 }
-
 function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+  console.log(itemId);
   if (favourites.includes(itemId)) {
     favourites = favourites.filter((id) => id !== itemId);
-    document
-      .getElementById(itemId)
-      .querySelector(".favourite-button").innerText = iconA;
+
+    document.getElementById("favourite_" + itemId).innerText = iconA;
   } else {
-    document
-      .getElementById(itemId)
-      .querySelector(".favourite-button").innerText = iconB;
+    document.getElementById("favourite_" + itemId).innerText = iconB;
     favourites.push(itemId);
   }
   localStorage.setItem("favourites", JSON.stringify(favourites));
@@ -85,6 +68,7 @@ function toggleFavourite(itemId) {
 function loadFavourites() {
   const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   favourites.forEach((itemId) => {
+    addPOI("80%", "path/to/image3.png");
     const item = document.getElementById(itemId);
     if (item) {
       const button = item.querySelector(".favourite-button");
@@ -105,8 +89,8 @@ const progressBarHtml = `
   <div class="poi" style="left: 50%; background-image: url('path/to/image2.png');"></div>
   <div class="poi" style="left: 80%; background-image: url('path/to/image3.png');"></div>
 </div>
-`;
 
+`;
 const progressBarStyle = `
 #progress-container {
   position: relative;
@@ -121,7 +105,7 @@ const progressBarStyle = `
   width: 0;
   height: 100%;
   background-color: #3b82f6;
-  border-radius: 5px;
+  border-radius: 5px; /* Ensures the bar stays rounded */
   transition: width 0.3s;
 }
 
@@ -139,11 +123,11 @@ const progressBarStyle = `
   transform: translateX(-50%);
 }
 
+/* Specific adjustment for POIs at the 100% position */
 .poi:last-child {
-  transform: translateX(-80%);
+  transform: translateX(-80%); /* Adjust as needed for the desired placement */
 }
 `;
-
 function addStyles() {
   const style = document.createElement("style");
   style.textContent = progressBarStyle;
@@ -152,7 +136,6 @@ function addStyles() {
     ? document.head.appendChild(style)
     : document.body.appendChild(style);
 }
-
 function addProgressBar() {
   const progressContainer = document.createElement("div");
   progressContainer.id = "progress-container";
@@ -161,16 +144,14 @@ function addProgressBar() {
   progressBar.id = "progress-bar";
 
   progressContainer.appendChild(progressBar);
+  //add br
   const br = document.createElement("br");
   const appendTo = document.querySelector(
     "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
   );
-  if (appendTo) {
-    appendTo.appendChild(br);
-    appendTo.appendChild(progressContainer);
-  }
+  appendTo.appendChild(br);
+  appendTo.appendChild(progressContainer);
 }
-
 function addPOI(position, imageUrl, title = "POI") {
   const poi = document.createElement("div");
   poi.className = "poi";
@@ -183,7 +164,6 @@ function addPOI(position, imageUrl, title = "POI") {
     progressContainer.appendChild(poi);
   }
 }
-
 function removePOI(position) {
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
@@ -191,12 +171,11 @@ function removePOI(position) {
     for (const poi of pois) {
       if (poi.style.left === position) {
         poi.remove();
-        break;
+        break; // Exit after removing the targeted POI
       }
     }
   }
 }
-
 function setProgress(percent) {
   const progressBar = document.getElementById("progress-bar");
   if (progressBar) {
