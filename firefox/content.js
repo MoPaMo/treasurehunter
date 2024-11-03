@@ -64,6 +64,26 @@ function toggleFavourite(itemId) {
     favourites = favourites.filter((fav) => fav.id !== itemId);
     document.getElementById("favourite_" + itemId).innerText = iconA;
     removePOI(itemId);
+    if (largest_price == existingFavourite.number) {
+      largest_price = 0;
+      favourites.forEach((item) => {
+        let price = item.number;
+        if (price > largest_price) {
+          largest_price = price;
+        }
+      });
+      console.log("largest price", largest_price);
+      Array.from(document.getElementsByClassName("poi")).forEach((poi) => {
+        poi.remove();
+      });
+      favourites.forEach((item) => {
+        let price = item.number;
+        let percent = (price / largest_price) * 100;
+        console.log("percent:", percent);
+        addPOI(percent + "%", item.url, item.id, price);
+      });
+      setProgress((Doubloons * 100) / largest_price);
+    }
   } else {
     const itemUrl = document
       .getElementById("item_" + itemId)
@@ -227,7 +247,7 @@ function addPOI(position, imageUrl, title = "POI", price = 0) {
   poi.style.backgroundImage = `url('${imageUrl}')`;
   poi.title = title;
   poi.id = "poi_" + title;
-  let price_str = price > 1000 ? (price / 1000).toFixed(1) + "k" : price;
+  let price_str = price > 950 ? (price / 1000).toFixed(1) + "k" : price;
   poi.setAttribute("data-price", price_str);
 
   const progressContainer = document.getElementById("progress-container");
