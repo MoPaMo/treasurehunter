@@ -76,3 +76,50 @@ function loadFavourites() {
 
 console.log("content.js");
 setTimeout(getItems, 1000);
+
+const progressBarHtml = `
+<div id="progress-container">
+  <div id="progress-bar"></div>
+  <div class="poi" style="left: 20%; background-image: url('path/to/image1.png');"></div>
+  <div class="poi" style="left: 50%; background-image: url('path/to/image2.png');"></div>
+  <div class="poi" style="left: 80%; background-image: url('path/to/image3.png');"></div>
+</div>
+
+`;
+const progressBarStyle = `
+#progress-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: visible;
+}
+
+#progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 5px; /* Ensures the bar stays rounded */
+  transition: width 0.3s;
+}
+
+.poi {
+  position: absolute;
+  top: -8px;
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+}
+
+/* Specific adjustment for POIs at the 100% position */
+.poi:last-child {
+  transform: translateX(-80%); /* Adjust as needed for the desired placement */
+}
+`;
