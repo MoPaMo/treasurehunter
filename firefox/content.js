@@ -76,6 +76,27 @@ function toggleFavourite(itemId) {
     );
     document.getElementById("favourite_" + itemId).innerText = iconB;
     favourites.push({ id: itemId, url: itemUrl, number: itemNumber });
+    if (itemNumber > largest_price) {
+      // reorder pois
+      largest_price = itemNumber;
+      Array.from(document.getElementsByClassName("poi")).forEach((poi) => {
+        poi.remove();
+      });
+      getDoublons();
+      favourites.forEach((item) => {
+        let price = item.number;
+        let percent = (price / largest_price) * 100;
+        console.log("percent:", percent);
+        addPOI(percent + "%", item.url, item.id, price);
+      });
+      setProgress((Doubloons * 100) / largest_price);
+    } else {
+      let price = itemNumber;
+      let percent = (price / largest_price) * 100;
+      console.log("percent:", percent);
+      addPOI(percent + "%", itemUrl, itemId, price);
+      setProgress((Doubloons * 100) / largest_price);
+    }
   }
 
   localStorage.setItem("favourites", JSON.stringify(favourites));
@@ -106,7 +127,7 @@ function loadFavourites() {
     let price = item.number;
     let percent = (price / largest_price) * 100;
     console.log("percent:", percent);
-    addPOI(percent + "%", item.url, item.id);
+    addPOI(percent + "%", item.url, item.id, price);
   });
   setProgress((Doubloons * 100) / largest_price);
 }
@@ -125,39 +146,54 @@ const progressBarHtml = `
 `;
 const progressBarStyle = `
 #progress-container {
-  position: relative;
-  width: 100%;
-  height: 10px;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  overflow: visible;
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: visible;
 }
 
 #progress-bar {
-  width: 0;
-  height: 100%;
-  background-color: #3b82f6;
-  border-radius: 5px; /* Ensures the bar stays rounded */
-  transition: width 0.3s;
+    width: 0;
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 5px; /* Ensures the bar stays rounded */
+    transition: width 0.3s;
 }
 
 .poi {
-  position: absolute;
-  top: -8px;
-  width: 24px;
-  height: 24px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-  transform: translateX(-50%);
+    position: absolute;
+    top: -12px; /* Adjusted to accommodate larger size */
+    width: 32px; /* Increased size */
+    height: 32px; /* Increased size */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    transform: translateX(-50%);
+}
+
+.poi::after {
+    content: attr(data-price);
+    position: absolute;
+    top: 36px; /* Adjusted to be below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-size: 12px;
+    pointer-events: none;
 }
 
 /* Specific adjustment for POIs at the 100% position */
 .poi:last-child {
-  transform: translateX(-80%); /* Adjust as needed for the desired placement */
+    transform: translateX(-80%); /* Adjust as needed for the desired placement */
 }
 `;
 function addStyles() {
@@ -184,13 +220,15 @@ function addProgressBar() {
   appendTo.appendChild(br);
   appendTo.appendChild(progressContainer);
 }
-function addPOI(position, imageUrl, title = "POI") {
+function addPOI(position, imageUrl, title = "POI", price = 0) {
   const poi = document.createElement("div");
   poi.className = "poi";
   poi.style.left = position;
   poi.style.backgroundImage = `url('${imageUrl}')`;
   poi.title = title;
   poi.id = "poi_" + title;
+  let price_str = price > 1000 ? (price / 1000).toFixed(1) + "k" : price;
+  poi.setAttribute("data-price", price_str);
 
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
