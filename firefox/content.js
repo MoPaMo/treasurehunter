@@ -23,7 +23,15 @@ function getItems() {
 
   loadFavourites();
 }
-
+//getDoublons
+/*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
+function getDoublons() {
+  document
+    .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
+    .forEach((item) => {
+      console.log(item);
+    });
+}
 function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   if (favourites.includes(itemId)) {
@@ -55,3 +63,4 @@ function loadFavourites() {
 
 console.log("content.js");
 setTimeout(getItems, 1000);
+setTimeout(getDoublons, 1000);
