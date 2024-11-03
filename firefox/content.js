@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", getItems);
 const iconA = "❤️";
 const iconB = "💔";
+let Doubloons = 0;
+
 function getItems() {
   console.log("getItems");
   const items = document.querySelectorAll(".grid div.flex.items-center");
@@ -24,7 +26,7 @@ function getItems() {
   loadFavourites();
   getDoublons();
 }
-let Doubloons = 0;
+
 //getDoublons
 /*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
 function getDoublons() {
