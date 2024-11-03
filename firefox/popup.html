@@ -24,7 +24,16 @@
 
     <script>
       document.getElementById("actionButton").addEventListener("click", () => {
-        localStorage.favourites = [];
+        browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          browser.tabs.sendMessage(tabs[0].id, { action: "deleteFavourites" });
+        });
+      });
+
+      browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === "deleteFavourites") {
+          localStorage.favourites = [];
+          sendResponse({ status: "success" });
+        }
       });
     </script>
   </body>

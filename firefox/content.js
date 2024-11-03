@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", getItems);
 const iconA = "❤️";
 const iconB = "💔";
 let Doubloons = 0;
+let largest_price = 0;
 
 function getItems() {
   console.log("getItems");
@@ -55,26 +56,58 @@ function getDoublons() {
 function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   console.log(itemId);
-  if (favourites.includes(itemId)) {
-    favourites = favourites.filter((id) => id !== itemId);
+  //w-full h-full object-cover transition-transform duration-300 hover:scale-105
+  const itemUrl = document
+    .getElementById("item_" + itemId)
+    .querySelector("img.w-full").src;
+  const itemNumber = Number(
+    document
+      .getElementById("item_" + itemId)
+      .querySelector(".text-green-500.font-semibold.flex.items-center")
+      .innerText
+  );
+  console.log(itemNumber);
+  const existingFavourite = favourites.find((fav) => fav.id === itemId);
 
+  if (existingFavourite) {
+    favourites = favourites.filter((fav) => fav.id !== itemId);
     document.getElementById("favourite_" + itemId).innerText = iconA;
   } else {
     document.getElementById("favourite_" + itemId).innerText = iconB;
-    favourites.push(itemId);
+    favourites.push({ id: itemId, url: itemUrl, number: itemNumber });
   }
+
   localStorage.setItem("favourites", JSON.stringify(favourites));
 }
 
 function loadFavourites() {
   const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
-  favourites.forEach((itemId) => {
-    addPOI("80%", "path/to/image3.png");
-    const item = document.getElementById("favourite_" + itemId);
-    if (item) {
-      item.innerText = iconB;
+  let fav_items = [];
+  favourites.forEach((item) => {
+    fav_items.push(item);
+
+    const btn = document.getElementById("favourite_" + item.id);
+    if (btn) {
+      btn.innerText = iconB;
     }
   });
+  getDoublons();
+  console.log(fav_items);
+  fav_items.forEach((item) => {
+    let price = item.number;
+    if (price > largest_price) {
+      largest_price = price;
+    }
+  });
+  console.log("largest price", largest_price);
+
+  fav_items.forEach((item) => {
+    let price = item.number;
+    let percent = (price / largest_price) * 100;
+    console.log("percent:", percent);
+    addPOI(percent + "%", item.url, item.id);
+  });
+  setProgress((Doubloons * 100) / largest_price);
 }
 
 console.log("content.js");
