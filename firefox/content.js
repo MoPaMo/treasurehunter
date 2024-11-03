@@ -190,7 +190,7 @@ const progressBarStyle = `
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: #3b82f6;
+    background-color: #ffffffef;
     border-radius: 50%;
     border: 2px solid #ffffff;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
