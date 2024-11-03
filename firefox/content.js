@@ -57,22 +57,23 @@ function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   console.log(itemId);
   //w-full h-full object-cover transition-transform duration-300 hover:scale-105
-  const itemUrl = document
-    .getElementById("item_" + itemId)
-    .querySelector("img.w-full").src;
-  const itemNumber = Number(
-    document
-      .getElementById("item_" + itemId)
-      .querySelector(".text-green-500.font-semibold.flex.items-center")
-      .innerText
-  );
-  console.log(itemNumber);
+
   const existingFavourite = favourites.find((fav) => fav.id === itemId);
 
   if (existingFavourite) {
     favourites = favourites.filter((fav) => fav.id !== itemId);
     document.getElementById("favourite_" + itemId).innerText = iconA;
+    removePOI(itemId);
   } else {
+    const itemUrl = document
+      .getElementById("item_" + itemId)
+      .querySelector("img.w-full").src;
+    const itemNumber = Number(
+      document
+        .getElementById("item_" + itemId)
+        .querySelector(".text-green-500.font-semibold.flex.items-center")
+        .innerText
+    );
     document.getElementById("favourite_" + itemId).innerText = iconB;
     favourites.push({ id: itemId, url: itemUrl, number: itemNumber });
   }
@@ -189,22 +190,18 @@ function addPOI(position, imageUrl, title = "POI") {
   poi.style.left = position;
   poi.style.backgroundImage = `url('${imageUrl}')`;
   poi.title = title;
+  poi.id = "poi_" + title;
 
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
     progressContainer.appendChild(poi);
   }
 }
-function removePOI(position) {
+function removePOI(id) {
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
-    const pois = progressContainer.getElementsByClassName("poi");
-    for (const poi of pois) {
-      if (poi.style.left === position) {
-        poi.remove();
-        break; // Exit after removing the targeted POI
-      }
-    }
+    const poi = progressContainer.querySelector(".poi[id^='poi_" + id + "']");
+    poi.remove();
   }
 }
 function setProgress(percent) {
