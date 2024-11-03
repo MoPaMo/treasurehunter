@@ -152,11 +152,12 @@ function addProgressBar() {
   appendTo.appendChild(br);
   appendTo.appendChild(progressContainer);
 }
-function addPOI(position, imageUrl) {
+function addPOI(position, imageUrl, title = "POI") {
   const poi = document.createElement("div");
   poi.className = "poi";
   poi.style.left = position;
   poi.style.backgroundImage = `url('${imageUrl}')`;
+  poi.title = title;
 
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
