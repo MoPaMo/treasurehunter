@@ -30,7 +30,14 @@ function getDoublons() {
   document
     .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
     .forEach((item) => {
-      console.log(item);
+      console.log(item.innerHTML);
+      // strip <span class="sm:inline hidden"> Doubloons</span>
+      let val = item.innerHTML.replace(
+        /<span class="sm:inline hidden"> Doubloons<\/span>/,
+        ""
+      );
+      val = Number(val) || 0;
+      console.log(val);
     });
 }
 function toggleFavourite(itemId) {
