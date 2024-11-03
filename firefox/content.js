@@ -22,7 +22,12 @@ function getItems() {
     });
     item.appendChild(favouriteButton);
   });
-
+  addStyles();
+  addProgressBar();
+  addPOI("20%", "path/to/image1.png");
+  addPOI("50%", "path/to/image2.png");
+  addPOI("80%", "path/to/image3.png");
+  setProgress(30);
   loadFavourites();
   getDoublons();
 }
@@ -31,7 +36,7 @@ function getItems() {
 /*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
 function getDoublons() {
   document
-    .querySelector("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
+    .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
     .forEach((item) => {
       console.log(item.innerHTML);
       // strip <span class="sm:inline hidden"> Doubloons</span>
@@ -123,3 +128,56 @@ const progressBarStyle = `
   transform: translateX(-80%); /* Adjust as needed for the desired placement */
 }
 `;
+function addStyles() {
+  const style = document.createElement("style");
+  style.textContent = progressBarStyle;
+
+  document.head
+    ? document.head.appendChild(style)
+    : document.body.appendChild(style);
+}
+function addProgressBar() {
+  const progressContainer = document.createElement("div");
+  progressContainer.id = "progress-container";
+
+  const progressBar = document.createElement("div");
+  progressBar.id = "progress-bar";
+
+  progressContainer.appendChild(progressBar);
+  //add br
+  const br = document.createElement("br");
+  const appendTo = document.querySelector(
+    "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
+  );
+  appendTo.appendChild(br);
+  appendTo.appendChild(progressContainer);
+}
+function addPOI(position, imageUrl) {
+  const poi = document.createElement("div");
+  poi.className = "poi";
+  poi.style.left = position;
+  poi.style.backgroundImage = `url('${imageUrl}')`;
+
+  const progressContainer = document.getElementById("progress-container");
+  if (progressContainer) {
+    progressContainer.appendChild(poi);
+  }
+}
+function removePOI(position) {
+  const progressContainer = document.getElementById("progress-container");
+  if (progressContainer) {
+    const pois = progressContainer.getElementsByClassName("poi");
+    for (const poi of pois) {
+      if (poi.style.left === position) {
+        poi.remove();
+        break; // Exit after removing the targeted POI
+      }
+    }
+  }
+}
+function setProgress(percent) {
+  const progressBar = document.getElementById("progress-bar");
+  if (progressBar) {
+    progressBar.style.width = percent + "%";
+  }
+}
