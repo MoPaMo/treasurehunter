@@ -24,11 +24,12 @@ function getItems() {
   loadFavourites();
   getDoublons();
 }
+let Doubloons = 0;
 //getDoublons
 /*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
 function getDoublons() {
   document
-    .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
+    .querySelector("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
     .forEach((item) => {
       console.log(item.innerHTML);
       // strip <span class="sm:inline hidden"> Doubloons</span>
@@ -38,6 +39,8 @@ function getDoublons() {
       );
       val = Number(val.replace(/[^\d.-]/g, "")) || 0;
       console.log(val);
+      Doubloons = val;
+      return val;
     });
 }
 function toggleFavourite(itemId) {
