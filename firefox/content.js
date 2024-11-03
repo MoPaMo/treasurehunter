@@ -51,6 +51,7 @@ function getDoublons() {
       return val;
     });
 }
+
 function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   console.log(itemId);
@@ -69,12 +70,9 @@ function loadFavourites() {
   const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   favourites.forEach((itemId) => {
     addPOI("80%", "path/to/image3.png");
-    const item = document.getElementById(itemId);
+    const item = document.getElementById("favourite_" + itemId);
     if (item) {
-      const button = item.querySelector(".favourite-button");
-      if (button) {
-        button.innerText = iconB;
-      }
+      item.innerText = iconB;
     }
   });
 }
