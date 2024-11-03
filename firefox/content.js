@@ -36,7 +36,7 @@ function getDoublons() {
         /<span class="sm:inline hidden"> Doubloons<\/span>/,
         ""
       );
-      val = Number(val) || 0;
+      val = Number(val.replace(/[^\d.-]/g, "")) || 0;
       console.log(val);
     });
 }
