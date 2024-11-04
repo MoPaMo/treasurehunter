@@ -5,7 +5,7 @@ Adds heart buttons to all shop items and a progress bar comparing your dubloons 
 
 ![UI](https://cloud-jwdp2xf3l-hack-club-bot.vercel.app/0screenshot_2024-11-03_at_15.08.13.png)
 ### Installation
-Hopefully soon on Firefox Add-ons: <https://addons.mozilla.org/en-US/firefox/addon/highseas-shop-favourite-button/>
+Hopefully soon on Firefox Add-ons: <https://addons.mozilla.org/addon/treasurehunter/>
 
 Might require reloading the page after installation.
 
