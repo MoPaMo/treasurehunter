@@ -6,7 +6,7 @@
   "permissions": ["storage", "activeTab"],
   "content_scripts": [
     {
-      "matches": ["https://highseas.hackclub.com/shop"],
+      "matches": ["https://highseas.hackclub.com/*"],
       "js": ["content.js"]
     }
   ]

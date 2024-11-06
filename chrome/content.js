@@ -258,3 +258,7 @@ function setProgress(percent) {
     progressBar.style.width = percent + "%";
   }
 }
+
+window.addEventListener("popstate", function (event) {
+    setTimeout(getItems, 1000);
+});
