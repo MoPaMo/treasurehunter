@@ -114,7 +114,8 @@ function toggleFavourite(itemId) {
     }
   }
 
-  localStorage.setItem("favourites", JSON.stringify(favourites));
+    localStorage.setItem("favourites", JSON.stringify(favourites));
+    setLeftValue();
 }
 
 function loadFavourites() {
@@ -236,9 +237,11 @@ const progressBarStyle = `
     background-color: #000000;
     border-radius: 0.5rem;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 .timer-left::after {
-    content: "till next goal";
+    content: "till top goal";
     position: absolute;
     top: 100%;
     left: 50%;
@@ -247,7 +250,10 @@ const progressBarStyle = `
     color: #ffffff;
     margin-top: 0.25rem;
 }
-    .timer-right {
+.timer-left img {
+    margin-left: 0.5rem;
+}
+.timer-right {
     font-size: 1rem;
     font-weight: bold;
     color: #ffffff;
@@ -257,7 +263,7 @@ const progressBarStyle = `
     position: relative;
 }
 .timer-right::after {
-    content: "of challenge time";
+    content: "of time";
     position: absolute;
     top: 100%;
     left: 50%;
@@ -317,7 +323,11 @@ function addTimer() {
     "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
   );
     
-  appendTo.appendChild(timerContainer);
+    appendTo.appendChild(timerContainer);
+    setInterval(setTimerValue, 1000);
+    setRightValue()
+    setInterval(setRightValue, 1000 * 60 * 60);
+    setLeftValue();
 }
 
 function addPOI(position, imageUrl, title = "POI", price = 0) {
@@ -334,6 +344,45 @@ function addPOI(position, imageUrl, title = "POI", price = 0) {
   if (progressContainer) {
     progressContainer.appendChild(poi);
   }
+}
+function setTimerValue() {
+  const timerValue = document.querySelector(".timer-value");
+    if (timerValue) {
+        const time = new Date();
+        const endTime = new Date("2025-01-31T23:59:59-08:00");
+        const timeLeft = endTime - time;
+        let value;
+        if (timeLeft > 86400000) { // More than one day
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            value = `${days}d ${hours}h`;
+        } else { // Less than one day
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            value = `${hours}h ${minutes}m ${seconds}s`;
+        }
+    timerValue.innerText = value;
+  }
+}
+function setRightValue() {
+    const timerRight = document.querySelector(".timer-right");
+    if (timerRight) {
+        const time = new Date();
+        const endTime = new Date("2025-01-31T23:59:59-08:00");
+        const timeLeft = endTime - time;
+        const totalTime = 7776000000;
+        const value = `${Math.floor(100-(timeLeft / totalTime) * 100)}%`;
+        timerRight.innerText = value;
+    }
+}
+function setLeftValue() {
+    const timerLeft = document.querySelector(".timer-left");
+    if (timerLeft) {
+        getDoublons();
+        const value = largest_price - Doubloons;
+        timerLeft.innerHTML = `${(value > 950 ? (value/1000).toFixed(1) +"k" : value)} <img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5" style="disply: inline">`;
+    }
 }
 
 function removePOI(id) {
