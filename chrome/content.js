@@ -29,7 +29,8 @@ function getItems() {
   addStyles();
   addProgressBar();
   setProgress(30);
-  loadFavourites();
+    loadFavourites();
+    addTimer();
   getDoublons();
 }
 
@@ -201,6 +202,70 @@ const progressBarStyle = `
 .poi:last-child {
     transform: translateX(-80%); /* Adjust as needed for the desired placement */
 }
+.timer-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.timer-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+}
+.timer-value::after {
+    content: "time remaining";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
+    
+.timer-left {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+}
+.timer-left::after {
+    content: "till next goal";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.45rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
+    .timer-right {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+}
+.timer-right::after {
+    content: "of challenge time";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.45rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
 `;
 
 function addStyles() {
@@ -226,6 +291,33 @@ function addProgressBar() {
   );
   appendTo.appendChild(br);
   appendTo.appendChild(progressContainer);
+}
+function addTimer() {
+  // Timer for end of hackathon
+
+  const timerContainer = document.createElement("div");
+  timerContainer.className = "timer-container";
+
+  const timerValue = document.createElement("div");
+  timerValue.className = "timer-value";
+  timerValue.innerText = "90:00:00";
+
+    const timerLeft = document.createElement("div");
+    timerLeft.className = "timer-left";
+    timerLeft.innerText = "Time Left";
+
+    const timerRight = document.createElement("div");
+    timerRight.className = "timer-right";
+    timerRight.innerText = "50%";
+
+    timerContainer.appendChild(timerLeft);
+    timerContainer.appendChild(timerValue);
+    timerContainer.appendChild(timerRight);
+  const appendTo = document.querySelector(
+    "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
+  );
+    
+  appendTo.appendChild(timerContainer);
 }
 
 function addPOI(position, imageUrl, title = "POI", price = 0) {
@@ -260,5 +352,5 @@ function setProgress(percent) {
 }
 
 window.addEventListener("popstate", function (event) {
-    setTimeout(getItems, 1000);
+  setTimeout(getItems, 1000);
 });
