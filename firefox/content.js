@@ -22,7 +22,6 @@ function getItems() {
       const itemId = e.currentTarget.id.replace("favourite_", "");
       toggleFavourite(itemId);
     });
-    // append to child flex items-center p-6 pt-4
     item
       .querySelector("div.flex.items-center.p-6.pt-4")
       .appendChild(favouriteButton);
@@ -30,18 +29,16 @@ function getItems() {
   addStyles();
   addProgressBar();
   setProgress(30);
-  loadFavourites();
+    loadFavourites();
+    addTimer();
   getDoublons();
 }
 
-//getDoublons
-/*<div class="flex items-center gap-1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r5:" data-state="closed"><img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5"><span class="mr-2">...<span class="sm:inline hidden"> Doubloons</span></span></div>*/
 function getDoublons() {
   document
     .querySelectorAll("div.right-px > div.flex.items-center.gap-1 > span.mr-2")
     .forEach((item) => {
       console.log(item.innerHTML);
-      // strip <span class="sm:inline hidden"> Doubloons</span>
       let val = item.innerHTML.replace(
         /<span class="sm:inline hidden"> Doubloons<\/span>/,
         ""
@@ -56,7 +53,6 @@ function getDoublons() {
 function toggleFavourite(itemId) {
   let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
   console.log(itemId);
-  //w-full h-full object-cover transition-transform duration-300 hover:scale-105
 
   const existingFavourite = favourites.find((fav) => fav.id === itemId);
 
@@ -97,7 +93,6 @@ function toggleFavourite(itemId) {
     document.getElementById("favourite_" + itemId).innerText = iconB;
     favourites.push({ id: itemId, url: itemUrl, number: itemNumber });
     if (itemNumber > largest_price) {
-      // reorder pois
       largest_price = itemNumber;
       Array.from(document.getElementsByClassName("poi")).forEach((poi) => {
         poi.remove();
@@ -119,7 +114,8 @@ function toggleFavourite(itemId) {
     }
   }
 
-  localStorage.setItem("favourites", JSON.stringify(favourites));
+    localStorage.setItem("favourites", JSON.stringify(favourites));
+    setLeftValue();
 }
 
 function loadFavourites() {
@@ -155,15 +151,6 @@ function loadFavourites() {
 console.log("content.js");
 setTimeout(getItems, 1000);
 
-const progressBarHtml = `
-<div id="progress-container">
-  <div id="progress-bar"></div>
-  <div class="poi" style="left: 20%; background-image: url('path/to/image1.png');"></div>
-  <div class="poi" style="left: 50%; background-image: url('path/to/image2.png');"></div>
-  <div class="poi" style="left: 80%; background-image: url('path/to/image3.png');"></div>
-</div>
-
-`;
 const progressBarStyle = `
 #progress-container {
     position: relative;
@@ -216,7 +203,77 @@ const progressBarStyle = `
 .poi:last-child {
     transform: translateX(-80%); /* Adjust as needed for the desired placement */
 }
+.timer-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.timer-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+}
+.timer-value::after {
+    content: "time remaining";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
+    
+.timer-left {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.timer-left::after {
+    content: "till top goal";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.45rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
+.timer-left img {
+    margin-left: 0.5rem;
+}
+.timer-right {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    border-radius: 0.5rem;
+    position: relative;
+}
+.timer-right::after {
+    content: "of time";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.45rem;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
 `;
+
 function addStyles() {
   const style = document.createElement("style");
   style.textContent = progressBarStyle;
@@ -225,6 +282,7 @@ function addStyles() {
     ? document.head.appendChild(style)
     : document.body.appendChild(style);
 }
+
 function addProgressBar() {
   const progressContainer = document.createElement("div");
   progressContainer.id = "progress-container";
@@ -233,7 +291,6 @@ function addProgressBar() {
   progressBar.id = "progress-bar";
 
   progressContainer.appendChild(progressBar);
-  //add br
   const br = document.createElement("br");
   const appendTo = document.querySelector(
     "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
@@ -241,6 +298,38 @@ function addProgressBar() {
   appendTo.appendChild(br);
   appendTo.appendChild(progressContainer);
 }
+function addTimer() {
+  // Timer for end of hackathon
+
+  const timerContainer = document.createElement("div");
+  timerContainer.className = "timer-container";
+
+  const timerValue = document.createElement("div");
+  timerValue.className = "timer-value";
+  timerValue.innerText = "90:00:00";
+
+    const timerLeft = document.createElement("div");
+    timerLeft.className = "timer-left";
+    timerLeft.innerText = "Time Left";
+
+    const timerRight = document.createElement("div");
+    timerRight.className = "timer-right";
+    timerRight.innerText = "50%";
+
+    timerContainer.appendChild(timerLeft);
+    timerContainer.appendChild(timerValue);
+    timerContainer.appendChild(timerRight);
+  const appendTo = document.querySelector(
+    "div.container.mx-auto.px-4.py-8.text-white > div.text-center.text-white"
+  );
+    
+    appendTo.appendChild(timerContainer);
+    setInterval(setTimerValue, 1000);
+    setRightValue()
+    setInterval(setRightValue, 1000 * 60 * 60);
+    setLeftValue();
+}
+
 function addPOI(position, imageUrl, title = "POI", price = 0) {
   const poi = document.createElement("div");
   poi.className = "poi";
@@ -256,6 +345,46 @@ function addPOI(position, imageUrl, title = "POI", price = 0) {
     progressContainer.appendChild(poi);
   }
 }
+function setTimerValue() {
+  const timerValue = document.querySelector(".timer-value");
+    if (timerValue) {
+        const time = new Date();
+        const endTime = new Date("2025-01-31T23:59:59-08:00");
+        const timeLeft = endTime - time;
+        let value;
+        if (timeLeft > 86400000) { // More than one day
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            value = `${days}d ${hours}h`;
+        } else { // Less than one day
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            value = `${hours}h ${minutes}m ${seconds}s`;
+        }
+    timerValue.innerText = value;
+  }
+}
+function setRightValue() {
+    const timerRight = document.querySelector(".timer-right");
+    if (timerRight) {
+        const time = new Date();
+        const endTime = new Date("2025-01-31T23:59:59-08:00");
+        const timeLeft = endTime - time;
+        const totalTime = 7776000000;
+        const value = `${Math.floor(100-(timeLeft / totalTime) * 100)}%`;
+        timerRight.innerText = value;
+    }
+}
+function setLeftValue() {
+    const timerLeft = document.querySelector(".timer-left");
+    if (timerLeft) {
+        getDoublons();
+        const value = largest_price - Doubloons;
+        timerLeft.innerHTML = `${(value > 950 ? (value/1000).toFixed(1) +"k" : value)} <img src="doubloon.svg" alt="doubloons" class="w-4 sm:w-5 h-4 sm:h-5" style="disply: inline">`;
+    }
+}
+
 function removePOI(id) {
   const progressContainer = document.getElementById("progress-container");
   if (progressContainer) {
@@ -263,6 +392,7 @@ function removePOI(id) {
     poi.remove();
   }
 }
+
 function setProgress(percent) {
   const progressBar = document.getElementById("progress-bar");
   if (progressBar) {
@@ -271,5 +401,5 @@ function setProgress(percent) {
 }
 
 window.addEventListener("popstate", function (event) {
-    setTimeout(getItems, 1000);
-  });
+  setTimeout(getItems, 1000);
+});
