@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", getItems);
-const iconA = "❤️";
-const iconB = "💔";
+const iconA = localStorage.getItem("favExt.iconA") || "❤️";
+const iconB = localStorage.getItem("favExt.iconB") || "💔";
+
+localStorage.setItem("favExt.iconA", iconA);
+localStorage.setItem("favExt.iconB", iconB);
 let Doubloons = 0;
 let largest_price = 0;
 

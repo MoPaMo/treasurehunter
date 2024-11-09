@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extension Popup</title>
+    <style>
+      input{
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+        border: 0cm solid black;
+        text-align: center;
+        border-radius: 100%;
+        background: none;
+        color: currentColor;
+
+      }
+        button{
+            width: 100px;
+            height: 50px;
+            font-size: 1rem;
+            border: 0cm solid black;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+        }
+        body{
+            background-color: rgb(8 47 73);;
+            color: white;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>TreasureHunter</h1>
+
+    <hr>
+Set Icons:
+<input type="text" name="like" id="like" maxlength="1" placeholder="❤️">
+<input type="text" name="dislike" id="dislike" maxlength="1" placeholder="💔">
+
+    <button id="reset">RESET</button>
+
+  <script src="popup.js"></script>
+  </body>
+</html>
