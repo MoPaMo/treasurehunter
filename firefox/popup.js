@@ -1,12 +1,12 @@
 
-    document.getElementById('modify').addEventListener('click', () => {
+    document.getElementById('reset').addEventListener('click', () => {
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
           browser.tabs.executeScript(tabs[0].id, {
-            code: 'localStorage.setItem("key", "vale"); console.log("Local Storage Modified");'
+            code: 'localStorage.setItem("favourites", "[]"); console.log("Local Storage Modified");'
           });
         });
       });
-
+/*
 const inputA = document.getElementById('like');
 inputA.value = localStorage.getItem("favExt.iconA")|| "❤️"
 inputA.addEventListener('keyup', () => {
@@ -29,4 +29,4 @@ document.getElementById('dislike').addEventListener('keyup', () => {
             });
         });
     }
-})
+})*/
